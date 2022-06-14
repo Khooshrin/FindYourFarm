@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">SatelliteImageProcessing</string>
-    <string name="title_activity_maps">MapsActivity</string>
+    <string name="app_name">Find Your Farm</string>
+    <string name="title_activity_maps">Find Your Farm</string>
 </resources>
