@@ -14,7 +14,7 @@ class SplashScreen : AppCompatActivity() {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN)
         Handler().postDelayed( {
 
-                val intent= Intent(this,MapsActivity::class.java)
+                val intent= Intent(this,GetFarmDetails::class.java)
                  startActivity(intent)
                         finish()
         } ,4000)

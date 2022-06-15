@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Find Your Farm</string>
     <string name="title_activity_maps">Find Your Farm</string>
+    <string name="todo">TODO</string>
+    <string name="enter_farm_details">Enter Farm Details</string>
+    <string name="enter_farm_latitude">Enter Farm Latitude</string>
+    <string name="latitude_coordinates">Latitude Coordinates</string>
+    <string name="enter_farm_longitude">Enter Farm Longitude</string>
+    <string name="longitude_coordinates">Longitude Coordinates</string>
+    <string name="submit">SUBMIT</string>
 </resources>

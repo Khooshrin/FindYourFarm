@@ -10,6 +10,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.example.satelliteimageprocessing.databinding.ActivityMapsBinding
+import com.example.satelliteimageprocessing.GetFarmDetails
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -41,7 +42,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
         mMap.mapType=GoogleMap.MAP_TYPE_SATELLITE
         // Add a marker in Sydney and move the camera
-        val testfarm = LatLng(27.1897911, 74.8643260)
+        val latitude=intent.getStringExtra("Lat").toString().toDouble()
+        val longitude=intent.getStringExtra("Long").toString().toDouble()
+        val testfarm = LatLng(latitude, longitude)
         val zoomlevel=16.0
         //mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
