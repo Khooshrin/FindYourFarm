@@ -2,21 +2,44 @@ package com.example.satelliteimageprocessing
 
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.satelliteimageprocessing.databinding.ActivityMapsBinding
+import com.example.satelliteimageprocessing.ml.FinalDataset
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import org.tensorflow.lite.DataType
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.io.ByteArrayOutputStream
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
+import java.util.*
+import kotlin.concurrent.schedule
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
-
+    private fun convertBitmapToByteBuffer(bitmap: Bitmap): ByteBuffer? {
+        val byteBuffer =
+            ByteBuffer.allocateDirect(4  * 1080 * 1080 * 3)
+        byteBuffer.order(ByteOrder.nativeOrder())
+        val intValues = IntArray(1080 * 1080)
+        bitmap.getPixels(intValues, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+        var pixel = 0
+        for (i in 0 until 1080) {
+            for (j in 0 until 1080) {
+                val `val` = intValues[pixel++]
+                byteBuffer.putFloat(((`val` shr 16 and 0xFF) - 128) / 128.0f)
+                byteBuffer.putFloat(((`val` shr 8 and 0xFF) - 128) / 128.0f)
+                byteBuffer.putFloat(((`val` and 0xFF) - 128) / 128.0f)
+            }
+        }
+        return byteBuffer
+    }
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
     var imageSize = 224
@@ -54,115 +77,124 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(testfarm, zoomlevel.toFloat()))
 
-
+        var past = this
+       var ximage: Bitmap?
        var image: Bitmap?
-       image=null
-
+       ximage=null
+        image=null
+        var classes: Array<String>
    mMap.setOnMapLoadedCallback(GoogleMap.OnMapLoadedCallback {
        // Make a snapshot when map's done loading
        mMap.snapshot(GoogleMap.SnapshotReadyCallback { bitmap ->
 //           image = null
            /// make the bitmap null so everytime it //will fetch the new bitmap
-           image = bitmap
+           ximage = bitmap
        })
    })
 
+        var check = "HI"
+        Timer().schedule(5000) {
 
-//   val model = FinalDataset.newInstance(this)
 //
-//   // Creates inputs for reference.
+            val model = FinalDataset.newInstance(past)
+
+            // Creates inputs for reference.
+
+            // Creates inputs for reference.
+            val inputFeature0 =
+                TensorBuffer.createFixedSize(intArrayOf(1, 224, 224, 3), DataType.FLOAT32)
+//                    TensorBuffer.createDynamic(DataType.FLOAT32)
+                val byteBuffer: ByteBuffer = ByteBuffer.allocateDirect(4 * imageSize * imageSize * 3)
+            byteBuffer.order(ByteOrder.nativeOrder())
 //
-//   // Creates inputs for reference.
-//   val inputFeature0 =
-//       TensorBuffer.createFixedSize(intArrayOf(1, 224, 224, 3), DataType.FLOAT32)
-//   val byteBuffer: ByteBuffer = ByteBuffer.allocateDirect(4 * imageSize * imageSize * 3)
-//   byteBuffer.order(ByteOrder.nativeOrder())
 
-   // get 1D array of 224 * 224 pixels in image
+////    get 1D array of 224 * 224 pixels in image
+////
+////    get 1D array of 224 * 224 pixels in image
+            val intValues = IntArray(imageSize * imageSize)
 
-   // get 1D array of 224 * 224 pixels in image
-//   val intValues = IntArray(imageSize * imageSize)
-//   image!!.getPixels(intValues, 0, image!!.getWidth(), 0, 0, image!!.getWidth(), image!!.getHeight())
+            if (ximage == null) check = "dead"
+//            image = ximage?.let {
+//                Bitmap.createScaledBitmap(
+//                    it, 1080, 1080, false
+//                )
+//            }
+            image = ximage?.let { Bitmap.createBitmap(it, 428, 890, 224, 224) }
+//        check = image?.getHeight().toString()
+            image!!.getPixels(
+                intValues,
+                0,
+                image!!.getWidth(),
+                0,
+                0,
+                image!!.getWidth(),
+                image!!.getHeight()
+            )
+
 //
 //   // iterate over pixels and extract R, G, and B values. Add to bytebuffer.
 //
 //   // iterate over pixels and extract R, G, and B values. Add to bytebuffer.
-//   var pixel = 0
-//   for (i in 0 until imageSize) {
-//       for (j in 0 until imageSize) {
-//           val `val` = intValues[pixel++] // RGB
-//           byteBuffer.putFloat((`val` shr 16 and 0xFF) * (1f / 255f))
-//           byteBuffer.putFloat((`val` shr 8 and 0xFF) * (1f / 255f))
-//           byteBuffer.putFloat((`val` and 0xFF) * (1f / 255f))
-//       }
-//   }
+            var pixel = 0
+            for (i in 0 until imageSize) {
+                for (j in 0 until imageSize) {
+                    val `val` = intValues[pixel++] // RGB
+                    byteBuffer.putFloat((`val` shr 16 and 0xFF) * (1f / 255f))
+                    byteBuffer.putFloat((`val` shr 8 and 0xFF) * (1f / 255f))
+                    byteBuffer.putFloat((`val` and 0xFF) * (1f / 255f))
+                }
+            }
+            Log.d("shape", byteBuffer.toString())
+            Log.d("shape", inputFeature0.buffer.toString())
 
-//   inputFeature0.loadBuffer(byteBuffer)
+   inputFeature0.loadBuffer(byteBuffer)
+//
+////    Runs model inference and gets result.
+////
+////    Runs model inference and gets result.
 
-   // Runs model inference and gets result.
-
-   // Runs model inference and gets result.
-//   val outputs = model.process(inputFeature0)
-//   val outputFeature0: TensorBuffer = outputs.getOutputFeature0AsTensorBuffer()
-
-//   val confidences = outputFeature0.floatArray
+   val outputs = model.process(inputFeature0)
+   val outputFeature0: TensorBuffer = outputs.getOutputFeature0AsTensorBuffer()
+//
+   val confidences = outputFeature0.floatArray
 //   // find the index of the class with the biggest confidence.
 //   // find the index of the class with the biggest confidence.
-//   var maxPos = 0
-//   var maxConfidence = 0f
-//   for (i in confidences.indices) {
-//       if (confidences[i] > maxConfidence) {
-//           maxConfidence = confidences[i]
-//           maxPos = i
-//       }
-//   }
-//   val classes = arrayOf("Farmland Detected", "No Farmland Detected")
+   var maxPos = 0
+   var maxConfidence = 0f
+   for (i in confidences.indices) {
+       if (confidences[i] > maxConfidence) {
+           maxConfidence = confidences[i]
+           maxPos = i
+       }
+   }
+    classes = arrayOf("Farmland Detected", "No Farmland Detected")
+    check = classes[maxPos]
 
 
-    var past = this
-   // Releases model resources if no longer used.
-//   model.close()
+            // Releases model resources if no longer used.
+            model.close()
+    }
+            Handler().postDelayed( {
 
-        Handler().postDelayed( {
-//            val fileName = "ImageName"
-//            val bytes = ByteArrayOutputStream()
-//            image?.compress(Bitmap.CompressFormat.JPEG, 100,bytes)
-//            val fo: FileOutputStream = openFileOutput(fileName, Context.MODE_PRIVATE)
-//            fo.write(bytes.toByteArray())
-//            fo.close()
-//            val bitmapByteCount= image.compress()
+                val stream = ByteArrayOutputStream()
+                image?.compress(Bitmap.CompressFormat.JPEG, 98, stream)
+                val byteArray = stream.toByteArray()
 
-            val stream = ByteArrayOutputStream()
-            image?.compress(Bitmap.CompressFormat.JPEG, 98, stream)
-            val byteArray = stream.toByteArray()
+                val intent= Intent(past,FarmVerdict::class.java)
+                if(image != null){
+                    intent.putExtra("Verdict", check)
+                }
+                else {
+                    intent.putExtra("Verdict", "Farm found")
+                }
+                intent.putExtra("Image", byteArray)
+                startActivity(intent)
+                finish()
+            } ,10000)
 
 
-//            val newImage = image?.let { compress(it) }
-//            val size = image?.byteCount
-            val intent= Intent(past,FarmVerdict::class.java)
-            if(image != null){
-                intent.putExtra("Verdict", "aa")
-            }
-            else {
-                intent.putExtra("Verdict", "Farm found")
-            }
-            intent.putExtra("Image", byteArray)
-            startActivity(intent)
-            finish()
-        } ,3000)
-
+//
 
 
     }
-}
-
-fun compress(yourBitmap: Bitmap): Bitmap? {
-    //converted into webp into lowest quality
-    val stream = ByteArrayOutputStream()
-    yourBitmap.compress(Bitmap.CompressFormat.JPEG, 0, stream) //0=lowest, 100=highest quality
-    val byteArray = stream.toByteArray()
-
-
-    //convert your byteArray into bitmap
-    return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
 }
