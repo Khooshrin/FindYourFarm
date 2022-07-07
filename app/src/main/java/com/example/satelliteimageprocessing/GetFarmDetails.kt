@@ -19,16 +19,19 @@ class GetFarmDetails : AppCompatActivity() {
 
 
         submitButton.setOnClickListener{
-            val latitude=findViewById<EditText>(R.id.LatCoordinates).text.toString()
-            val longitude=findViewById<EditText>(R.id.LongCoordinates).text.toString()
-//            val latitude="19.042912"
-//            val longitude ="72.842934"
+//            val latitude=findViewById<EditText>(R.id.LatCoordinates).text.toString()
+//            val longitude=findViewById<EditText>(R.id.LongCoordinates).text.toString()
+            val latitude="26.5775"
+            val longitude ="93.1711"
 
             val intent = Intent(this, MapsActivity::class.java)
                 intent.putExtra("Lat", latitude)
                 intent.putExtra("Long", longitude)
                 startActivity(intent)
             finish()
+
             }
     }
+
+
 }

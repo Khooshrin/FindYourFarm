@@ -53,6 +53,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
     }
 
     /**
@@ -73,6 +74,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val longitude=intent.getStringExtra("Long").toString().toDouble()
         val testfarm = LatLng(latitude, longitude)
         val zoomlevel=16.0
+
         //mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(testfarm, zoomlevel.toFloat()))
@@ -93,7 +95,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
    })
 
         var check = "HI"
-        Timer().schedule(5000) {
+        Timer().schedule(2000) {
 
 //
             val model = FinalDataset.newInstance(past)
@@ -188,9 +190,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     intent.putExtra("Verdict", "Farm found")
                 }
                 intent.putExtra("Image", byteArray)
+
+                intent.putExtra("Lat", latitude.toString())
+                intent.putExtra("Long", longitude.toString())
+
                 startActivity(intent)
                 finish()
-            } ,10000)
+            } ,3000)
 
 
 //
