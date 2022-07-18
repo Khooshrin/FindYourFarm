@@ -17,7 +17,7 @@ class FarmVerdict : AppCompatActivity() {
         setContentView(R.layout.activity_farm_verdict)
         val verdictext=findViewById<TextView>(R.id.verdict)
         val imageView = findViewById<ImageView>(R.id.imageView4);
-        val nextButton: Button = findViewById<Button>(R.id.next)
+        val nextButton = findViewById<Button>(R.id.next)
         val bmp: Bitmap
         val latitude=intent.getStringExtra("Lat").toString()
         val longitude=intent.getStringExtra("Long").toString()
@@ -33,10 +33,11 @@ class FarmVerdict : AppCompatActivity() {
         verdictext.setText(output)
 
         nextButton.setOnClickListener{
-            val intent2 = Intent(this, FarmDetails::class.java)
-            intent2.putExtra("Lat", latitude)
-            intent2.putExtra("Long", longitude)
-            startActivity(intent2)
+            val intent = Intent(this, FarmFeatures::class.java)
+            intent.putExtra("Lat", latitude)
+            intent.putExtra("Long", longitude)
+            intent.putExtra("Image", byteArray)
+            startActivity(intent)
             finish()
         }
     }

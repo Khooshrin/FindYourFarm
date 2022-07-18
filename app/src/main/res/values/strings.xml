@@ -8,4 +8,8 @@
     <string name="enter_farm_longitude">Enter Farm Longitude</string>
     <string name="longitude_coordinates">Longitude Coordinates</string>
     <string name="submit">SUBMIT</string>
+    <string name="irrigation_practice">Irrigation Practice</string>
+    <string name="farm_features">FARM FEATURES</string>
+    <string name="textview">TextView</string>
+    <string name="cropping_pattern">Cropping Pattern</string>
 </resources>
