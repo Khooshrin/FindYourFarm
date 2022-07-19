@@ -19,6 +19,8 @@
         android:layout_marginTop="229dp"
         android:layout_marginEnd="2dp"
         android:layout_marginBottom="220dp"
-        app:srcCompat="@mipmap/splash_screen_foreground" />
+        android:contentDescription="TODO"
+        app:srcCompat="@drawable/ic_launcher_foreground"
+        tools:ignore="ImageContrastCheck" />
 
 </RelativeLayout>

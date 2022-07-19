@@ -17,6 +17,6 @@ class SplashScreen : AppCompatActivity() {
                 val intent= Intent(this,GetFarmDetails::class.java)
                  startActivity(intent)
                         finish()
-        } ,10)
+        } ,5000)
     }
 }
