@@ -19,8 +19,20 @@ class FarmFeatures : AppCompatActivity() {
         setContentView(R.layout.activity_farm_features)
         val irrigation = findViewById<TextView>(R.id.Irrigation)
         val cropping=findViewById<TextView>(R.id.CroppingPattern)
+        val wantHindi:Boolean = intent.getBooleanExtra("WantHindi", false)
+        if(wantHindi){
+            val irrigationLabel = findViewById<TextView>(R.id.IrrigationLabel)
+            irrigationLabel.setText("सिंचाई अभ्यास")
+            val farmFeaturesLabel = findViewById<TextView>(R.id.FarmFeaturesLabel)
+            farmFeaturesLabel.setText("खेत की विशेषताएं")
+            val croppingPatternLabel = findViewById<TextView>(R.id.CroppingPatternLabel)
+            croppingPatternLabel.setText("सिंफसल पैटर्न")
+
+        }
         val latitude=intent.getStringExtra("Lat").toString()
         val longitude=intent.getStringExtra("Long").toString()
+//        val latitude="26.5775"
+//        val longitude ="93.1711"
         val bmp: Bitmap
         val byteArray = intent.getByteArrayExtra("Image")
         bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray!!.size)
@@ -85,7 +97,9 @@ class FarmFeatures : AppCompatActivity() {
             }
         }
         val classes: Array<String> = arrayOf("Basin Irrigation", "Drip Irrigation","Furrow Irrigation","Sprinkler Irrigation","Surface Irrigation")
-        irrigation.text = classes[maxPos]
+        irrigation.setText(classes[maxPos])
+//        println(classes[maxPos])
+//        println("asdkljfhgasdkjhfgaksjdhfasdfj")
         model.close()
 
 

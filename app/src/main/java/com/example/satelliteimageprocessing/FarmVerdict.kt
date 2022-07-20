@@ -21,12 +21,19 @@ class FarmVerdict : AppCompatActivity() {
         val bmp: Bitmap
         val latitude=intent.getStringExtra("Lat").toString()
         val longitude=intent.getStringExtra("Long").toString()
-
+        val wantHindi:Boolean = intent.getBooleanExtra("WantHindi", false)
         var output = intent.getStringExtra("Verdict")
+        if(wantHindi && output == "No Farmland Detected"){
+            output = "कोई खेत नहीं मिला"
+        }
+        if(wantHindi && output == "Farmland Detected"){
+            output = "खेत का पता चला"
+        }
         if(output == "No Farmland Detected"){
 
             nextButton.visibility = View.INVISIBLE
         }
+        if(wantHindi) nextButton.setText("आगे बढ़े")
         val byteArray = intent.getByteArrayExtra("Image")
         bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray!!.size)
         imageView.setImageBitmap(bmp)
@@ -37,6 +44,7 @@ class FarmVerdict : AppCompatActivity() {
             intent.putExtra("Lat", latitude)
             intent.putExtra("Long", longitude)
             intent.putExtra("Image", byteArray)
+            intent.putExtra("WantHindi",wantHindi)
             startActivity(intent)
             finish()
         }

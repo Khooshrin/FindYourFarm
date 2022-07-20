@@ -216,6 +216,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         // Add a marker in Sydney and move the camera
         val latitude=intent.getStringExtra("Lat").toString().toDouble()
         val longitude=intent.getStringExtra("Long").toString().toDouble()
+        val wantHindi:Boolean = intent.getBooleanExtra("WantHindi", false)
         val testfarm = LatLng(latitude, longitude)
         val zoomlevel=16.0
         //mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
@@ -335,6 +336,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
             intent.putExtra("Lat", latitude.toString())
             intent.putExtra("Long", longitude.toString())
+            intent.putExtra("WantHindi",wantHindi)
             intent.putExtra("Image", byteArray)
             startActivity(intent)
             finish()
@@ -346,3 +348,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 }
+
+
+
+
